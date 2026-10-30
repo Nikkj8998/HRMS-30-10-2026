@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+<head>
+<meta charset="utf-8">
+<title>HRMS Performance Management Documentation</title>
+<!--[if gte mso 9]>
+<xml>
+<w:WordDocument>
+<w:View>Print</w:View>
+<w:Zoom>100</w:Zoom>
+<w:DoNotOptimizeForBrowser/>
+</w:WordDocument>
+</xml>
+<![endif]-->
+<style>
+  body {
+    font-family: 'Segoe UI', Calibri, Arial, sans-serif;
+    font-size: 11pt;
+    color: #1e293b;
+    line-height: 1.6;
+    margin: 24px;
+  }
+  h1 {
+    font-size: 22pt;
+    color: #0f766e;
+    border-bottom: 3px solid #14b8a6;
+    padding-bottom: 8px;
+    margin-bottom: 14px;
+  }
+  h2 {
+    font-size: 15pt;
+    color: #0f172a;
+    border-left: 5px solid #0d9488;
+    padding-left: 10px;
+    margin-top: 26px;
+    margin-bottom: 10px;
+  }
+  h3 {
+    font-size: 12pt;
+    color: #334155;
+    margin-top: 16px;
+    margin-bottom: 6px;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 18px;
+    font-size: 10pt;
+  }
+  th {
+    background-color: #0f766e;
+    color: #ffffff;
+    font-weight: bold;
+    padding: 8px 10px;
+    border: 1px solid #0d9488;
+    text-align: left;
+  }
+  td {
+    padding: 7px 10px;
+    border: 1px solid #cbd5e1;
+    vertical-align: top;
+  }
+  tr:nth-child(even) {
+    background-color: #f8fafc;
+  }
+  .highlight-box {
+    background-color: #f0fdfa;
+    border: 1px solid #99f6e4;
+    border-left: 5px solid #0d9488;
+    padding: 12px 16px;
+    margin: 14px 0;
+    border-radius: 4px;
+  }
+  .formula-box {
+    background-color: #f1f5f9;
+    border: 1px solid #cbd5e1;
+    border-left: 5px solid #3b82f6;
+    padding: 10px 14px;
+    margin: 12px 0;
+    font-family: Consolas, 'Courier New', monospace;
+    font-size: 10.5pt;
+  }
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    font-size: 9pt;
+    font-weight: bold;
+    border-radius: 4px;
+  }
+  .badge-teal { background-color: #ccfbf1; color: #115e59; }
+  .badge-blue { background-color: #dbeafe; color: #1e40af; }
+  .badge-green { background-color: #dcfce7; color: #166534; }
+  .badge-amber { background-color: #fef3c7; color: #92400e; }
+  .footer {
+    margin-top: 40px;
+    border-top: 1px solid #cbd5e1;
+    padding-top: 12px;
+    font-size: 9pt;
+    color: #64748b;
+  }
+</style>
+</head>
+<body>
+
+<h1>HRMS Performance Management System — Full Documentation</h1>
+<p><strong>System:</strong> Cybaem Tech Enterprise HRMS (Version 2.0)</p>
+<p><strong>Module:</strong> Sidebar &rarr; Performance (Goals & KPIs, Appraisals, 360° Feedback, Reports)</p>
+<p><strong>Release Cycle:</strong> Q1 2026 Active Implementation</p>
+<p><strong>Document Version:</strong> 2.0.0 | <strong>Date:</strong> October 29, 2026</p>
+
+<div class="highlight-box">
+  <strong>Executive Summary:</strong><br>
+  This document details the corporate quarterly performance management system implemented in the HRMS. The system connects organizational objectives (Goals & KPIs set by HR and Line Managers) with employee self-assessments, manager evaluations (Appraisals), multi-rater 360° feedback, and real-time department analytics and exportable executive reports. All calculations use live database records with zero hardcoded or mock math.
+</div>
+
+<h2>1. System Architecture & Performance Flow</h2>
+<p>The performance lifecycle is divided into 4 tightly integrated pillars operating on a quarterly cadence (Q1, Q2, Q3, Q4):</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="width: 20%;">Pillar</th>
+      <th style="width: 25%;">Primary Stakeholders</th>
+      <th style="width: 30%;">Core Capabilities</th>
+      <th style="width: 25%;">Output / Downstream Impact</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>1. Goals & KPIs</strong></td>
+      <td>HR Admins & Line Managers &rarr; Employees</td>
+      <td>Quarterly objectives, KPI target/metric setting, weightage allocation (10-100%), self-progress updates & notes.</td>
+      <td>Feeds real-time KPI Achievement Score (%) into quarterly Appraisals.</td>
+    </tr>
+    <tr>
+      <td><strong>2. Appraisals</strong></td>
+      <td>Employees &rarr; Department Line Managers &rarr; HR</td>
+      <td>KPI-driven scoring, self-assessment (1-5 rating & comments), Line Manager evaluation & feedback, balanced overall score.</td>
+      <td>Determines final employee performance ratings, promotions & appraisals.</td>
+    </tr>
+    <tr>
+      <td><strong>3. 360° Feedback</strong></td>
+      <td>Managers, Peers, Direct Reports, Cross-functional</td>
+      <td>4 Core Competencies (Technical, Delivery, Teamwork, Communication) rated 1-5, qualitative strengths & growth areas.</td>
+      <td>Multi-perspective behavioral insights supporting holistic performance evaluation.</td>
+    </tr>
+    <tr>
+      <td><strong>4. Analytics & Reports</strong></td>
+      <td>HR Executives & Department HODs</td>
+      <td>Department performance ranking, rating distribution bell curves, top performers leaderboard, executive PDF export.</td>
+      <td>Strategic talent insights, compensation reviews, and organizational audits.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>2. Module 1: Quarterly Goals & KPIs</h2>
+<p>Accessible via <strong>Sidebar &rarr; Performance &rarr; Goals & KPIs</strong>.</p>
+
+<h3>Key Features:</h3>
+<ul>
+  <li><strong>Quarterly Tabs:</strong> Filter by <code>Q1 (Active)</code>, <code>Q2</code>, <code>Q3</code>, <code>Q4</code>, or <code>All Quarters</code> with year selector (<code>2026</code>).</li>
+  <li><strong>Role-Based Creation:</strong>
+    <ul>
+      <li><span class="badge badge-teal">Set by HR</span>: Organization-wide compliance, code quality, and culture goals set by HR Admins.</li>
+      <li><span class="badge badge-blue">Set by Manager</span>: Technical deliverables, architecture milestones, and project execution set by Department Managers.</li>
+    </ul>
+  </li>
+  <li><strong>Add Quarterly Goal Modal:</strong>
+    <ul>
+      <li><strong>Department & Assignee Dropdown:</strong> Select department to filter available employees (e.g., Engineering &rarr; Gauri Dhapte, Sujay Palande, Deepa Nair).</li>
+      <li><strong>KPI Metric:</strong> Specific measurable target (e.g., <em>"Complete 100% on-time deployment with zero regressions"</em>).</li>
+      <li><strong>Target Value vs. Current Value:</strong> Quantifiable measurement (e.g., <em>Target: 100%, Current: 95%</em>).</li>
+      <li><strong>Weightage (%):</strong> Objective percentage weight (e.g., 40%, 30%, 30% summing to 100%).</li>
+      <li><strong>Priority & Due Date:</strong> High / Medium / Low priority tagging with deadline date picker.</li>
+    </ul>
+  </li>
+  <li><strong>Employee Self-Progress Updating:</strong> Employees click <strong>"Update Progress"</strong> to update completion % slider (0-100%), record their current metric value, write progress notes, and adjust status (<em>On Track, At Risk, Behind, Completed</em>).</li>
+  <li><strong>Manager Guidance:</strong> Line Managers can write coaching feedback directly on active goals.</li>
+</ul>
+
+<h2>3. Module 2: Performance Appraisals</h2>
+<p>Accessible via <strong>Sidebar &rarr; Performance &rarr; Appraisals</strong>.</p>
+
+<h3>Automated KPI Achievement Score Calculation:</h3>
+<p>The appraisal engine dynamically computes each employee's KPI Achievement Score from their real quarterly goals:</p>
+
+<div class="formula-box">
+  <strong>KPI Achievement Score (%)</strong> = &sum; (Goal Progress &times; Goal Weightage) / &sum; (Goal Weightage)<br><br>
+  <em>Example for Gauri Dhapte (Q1 2026):</em><br>
+  &bull; Goal 1: Leave Workflow Engine (40% wt &times; 95% prog) = 38.0<br>
+  &bull; Goal 2: Code Quality & Bug Rate (30% wt &times; 100% prog) = 30.0<br>
+  &bull; Goal 3: API Performance Optimization (30% wt &times; 85% prog) = 25.5<br>
+  <strong>Total KPI Score = 38.0 + 30.0 + 25.5 = 93.5% &asymp; 94%</strong>
+</div>
+
+<h3>Dual Review Workflow:</h3>
+<ol>
+  <li><strong>Stage 1 — Employee Self-Review:</strong>
+    <ul>
+      <li>Employee logs in, sees their computed KPI Score and goal breakdown.</li>
+      <li>Provides a Self Rating (1.0 to 5.0) and written accomplishments/highlights.</li>
+      <li>Clicks <em>"Submit to Line Manager"</em> &rarr; Status becomes <span class="badge badge-amber">Manager Review</span>.</li>
+    </ul>
+  </li>
+  <li><strong>Stage 2 — Line Manager Evaluation:</strong>
+    <ul>
+      <li>Designated Line Manager (e.g., Amit Sharma for Engineering) reviews employee's KPI score and self-evaluation.</li>
+      <li>Enters Manager Rating (1.0 to 5.0), verifies KPI achievement, and provides managerial feedback.</li>
+      <li>Clicks <em>"Complete Appraisal"</em> &rarr; Status becomes <span class="badge badge-green">Completed</span>.</li>
+    </ul>
+  </li>
+  <li><strong>Stage 3 — Balanced Overall Rating:</strong>
+    <div class="formula-box">
+      <strong>Overall Rating</strong> = [(KPI Score / 100) &times; 5.0 &times; 0.40] + [Manager Rating &times; 0.60]<br>
+      <em>Example: [(94 / 100) &times; 5 &times; 0.4] + [4.7 &times; 0.6] = 1.88 + 2.82 = 4.70 / 5.0</em>
+    </div>
+  </li>
+</ol>
+
+<h2>4. Module 3: 360° Multi-Source Feedback</h2>
+<p>Accessible via <strong>Sidebar &rarr; Performance &rarr; 360° Feedback</strong>.</p>
+
+<h3>Evaluation Dimensions & Core Competencies:</h3>
+<table>
+  <thead>
+    <tr>
+      <th style="width: 25%;">Competency Pillar</th>
+      <th style="width: 15%;">Scale</th>
+      <th style="width: 60%;">Evaluation Focus</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>1. Technical Mastery</strong></td>
+      <td>1.0 - 5.0</td>
+      <td>Code architecture, technical depth, problem-solving quality, and domain knowledge.</td>
+    </tr>
+    <tr>
+      <td><strong>2. Delivery & Reliability</strong></td>
+      <td>1.0 - 5.0</td>
+      <td>Meeting sprint deadlines, operational accountability, and deliverable quality.</td>
+    </tr>
+    <tr>
+      <td><strong>3. Teamwork & Culture</strong></td>
+      <td>1.0 - 5.0</td>
+      <td>Peer support, mentorship, cross-team collaboration, and positive workplace attitude.</td>
+    </tr>
+    <tr>
+      <td><strong>4. Communication & Leadership</strong></td>
+      <td>1.0 - 5.0</td>
+      <td>Clarity in communication, architectural documentation, and stakeholder alignment.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Reviewer Roles:</strong> Peers, Line Managers, Direct Reports, and Cross-functional collaborators can submit ratings, detailed written strengths, and constructive development areas.</p>
+
+<h2>5. Module 4: Performance Analytics & Department Reports</h2>
+<p>Accessible via <strong>Sidebar &rarr; Performance &rarr; Reports</strong>.</p>
+
+<h3>Executive Summary Metrics:</h3>
+<ul>
+  <li><strong>Department Performance Table:</strong> Compares staff count, active goals, goal delivery percentage, average rating, and top performers across all 11 departments.</li>
+  <li><strong>Rating Distribution Bell Curve:</strong>
+    <ul>
+      <li><em>Exceptional / Outstanding (4.5 - 5.0):</em> Top-tier organizational talent.</li>
+      <li><em>Exceeds Expectations (4.0 - 4.4):</em> Strong performers surpassing target KPIs.</li>
+      <li><em>Meets Expectations (3.5 - 3.9):</em> Consistent performers delivering on standard expectations.</li>
+      <li><em>Needs Development (&lt; 3.5):</em> Employees requiring targeted mentorship and performance plans.</li>
+    </ul>
+  </li>
+  <li><strong>Quarterly High Performers Leaderboard:</strong> Top 5 company-wide performers ranked by cumulative appraisal scores and KPI achievement.</li>
+  <li><strong>Executive PDF Export:</strong> Generates formatted reports with department comparison tables, KPI averages, and audit timestamps.</li>
+</ul>
+
+<h2>6. Master Department & Approver Reference Matrix</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Dept ID</th>
+      <th>Department Name</th>
+      <th>Line Manager (Approver #1)</th>
+      <th>Head of Department (Approver #2)</th>
+      <th>Sample Staff / Test Users</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>Human Resources</td>
+      <td>Nikita Nagargoje (ID 2)</td>
+      <td>Rohan Bhosale (ID 1)</td>
+      <td>Ganesh Kale (3), Priya Desai (4)</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Engineering</td>
+      <td>Amit Sharma (ID 5)</td>
+      <td>Rohan Bhosale (ID 1)</td>
+      <td>Gauri Dhapte (1561), Sujay Palande (6), Deepa Nair (7)</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Finance</td>
+      <td>Vinay Shinde (ID 10)</td>
+      <td>Rohan Bhosale (ID 1)</td>
+      <td>Pooja Kulkarni (11), Suresh Jadhav (12)</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>Marketing</td>
+      <td>Meera Joshi (ID 13)</td>
+      <td>Rohan Bhosale (ID 1)</td>
+      <td>Akash Bhandari (14), Tanvi Pawar (15)</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>Operations</td>
+      <td>Rajesh Yadav (ID 16)</td>
+      <td>Rohan Bhosale (ID 1)</td>
+      <td>Lata Gaikwad (17), Prathamesh Mane (18)</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td>Engineering (Nexora)</td>
+      <td>Vijay Menon (ID 25)</td>
+      <td>Harish Babu (ID 26)</td>
+      <td>Preethi Subramaniam (27), Kiran Naik (28)</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td>HR & Administration</td>
+      <td>Kavitha Rao (ID 22)</td>
+      <td>Arjun Reddy (ID 21)</td>
+      <td>Sunil Varma (23), Ananya Krishnan (24)</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td>Sales</td>
+      <td>Manoj Pillai (ID 30)</td>
+      <td>Sowmya Chandran (ID 31)</td>
+      <td>Nikhil Shetty (32), Reshma Patel (33)</td>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td>Finance & Accounts</td>
+      <td>Sneha Ghosh (ID 35)</td>
+      <td>Lalitha Nambiar (ID 37)</td>
+      <td>Ramesh Agarwal (36), Abhinav Gupta (38)</td>
+    </tr>
+    <tr>
+      <td>10</td>
+      <td>Product Management</td>
+      <td>Aarti Shah (ID 39)</td>
+      <td>Siddharth Rao (ID 40)</td>
+      <td>Hema Venkat (41), Praveen Kumar (42)</td>
+    </tr>
+    <tr>
+      <td>11</td>
+      <td>Customer Success</td>
+      <td>Raghav Sharma (ID 44)</td>
+      <td>Padmini Rajan (ID 45)</td>
+      <td>Gautam Tiwari (46), Shruti Mishra (47)</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>7. Step-by-Step Testing & User Guide</h2>
+
+<h3>Scenario 1: HR Admin / Manager Sets a New Quarterly Goal</h3>
+<ol>
+  <li>Navigate to <strong>Sidebar &rarr; Performance &rarr; Goals & KPIs</strong>.</li>
+  <li>Select <strong>Q1 (Jan - Mar)</strong> tab and year <strong>2026</strong>.</li>
+  <li>Click <strong>"Add Quarterly Goal"</strong>.</li>
+  <li>Choose Department (e.g. <em>Engineering</em>) and Assignee (e.g. <em>Gauri Dhapte</em>).</li>
+  <li>Enter Goal Title (e.g. <em>"Real-Time WebSocket Notifications"</em>), Metric (<em>"Zero drop rate"</em>), Weightage (<em>25%</em>), Due Date.</li>
+  <li>Click <strong>"Assign Goal"</strong> &rarr; The goal appears in the list with <span class="badge badge-teal">Set by HR</span> badge.</li>
+</ol>
+
+<h3>Scenario 2: Employee Updates Goal Progress</h3>
+<ol>
+  <li>Employee logs into HRMS.</li>
+  <li>Navigates to <strong>Goals & KPIs</strong> and locates assigned goal.</li>
+  <li>Clicks <strong>"Update Progress"</strong>.</li>
+  <li>Adjusts the slider from 80% to 100%, updates current metric, and adds a note: <em>"Deployed to staging and verified all test suites."</em></li>
+  <li>Clicks <strong>"Save Progress"</strong> &rarr; Progress bar updates immediately to 100% and status marks <span class="badge badge-green">Completed</span>.</li>
+</ol>
+
+<h3>Scenario 3: Employee Submits Self-Review & Manager Evaluates</h3>
+<ol>
+  <li>Navigate to <strong>Sidebar &rarr; Performance &rarr; Appraisals</strong>.</li>
+  <li>The employee sees their dynamically calculated <strong>KPI Score</strong> (e.g., 94%).</li>
+  <li>Click <strong>"Self Review"</strong>, select <code>4.5 - Outstanding</code>, enter achievements, and submit.</li>
+  <li>Line Manager logs in, opens Appraisals, clicks <strong>"Evaluate"</strong>.</li>
+  <li>Enters Manager Rating (<code>4.7</code>), confirms KPI score, enters developmental feedback, and clicks <strong>"Complete Appraisal"</strong>.</li>
+  <li>Status transitions to <span class="badge badge-green">Completed</span> and final balanced overall rating updates to <strong>4.6 / 5.0</strong>.</li>
+</ol>
+
+<h3>Scenario 4: Submitting 360° Peer Feedback</h3>
+<ol>
+  <li>Navigate to <strong>Sidebar &rarr; Performance &rarr; 360° Feedback</strong>.</li>
+  <li>Click <strong>"Give 360 Feedback"</strong>.</li>
+  <li>Select colleague, select relationship (<em>Peer / Teammate</em>).</li>
+  <li>Score the 4 competencies (Technical: 5, Delivery: 4, Teamwork: 5, Communication: 5).</li>
+  <li>Write Core Strengths and Growth Areas, then click <strong>"Submit Review"</strong>.</li>
+</ol>
+
+<h3>Scenario 5: Viewing Performance Reports & Exporting PDF</h3>
+<ol>
+  <li>Navigate to <strong>Sidebar &rarr; Performance &rarr; Reports</strong>.</li>
+  <li>Select <strong>Q1 2026</strong> tab.</li>
+  <li>Review the real department averages, rating distribution, and Top 5 Performers leaderboard.</li>
+  <li>Click <strong>"Export Executive PDF"</strong> &rarr; A cleanly formatted PDF is automatically downloaded to the computer.</li>
+</ol>
+
+<h2>8. Technical REST API Reference</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Endpoint</th>
+      <th>Method</th>
+      <th>Access Role</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>/api/goals</code></td>
+      <td>GET</td>
+      <td>All Authenticated</td>
+      <td>Query by <code>quarter</code>, <code>year</code>, <code>departmentId</code>, <code>userId</code>. Employees see their own goals; Managers/HR see team/all.</td>
+    </tr>
+    <tr>
+      <td><code>/api/goals</code></td>
+      <td>POST</td>
+      <td>HR, Manager, Admin</td>
+      <td>Creates a quarterly goal with KPI metric, weightage, target value, and creator attribution.</td>
+    </tr>
+    <tr>
+      <td><code>/api/goals/:id</code></td>
+      <td>PUT</td>
+      <td>Assignee, Manager, HR</td>
+      <td>Updates goal progress (%), current value, status, employee notes, and manager feedback.</td>
+    </tr>
+    <tr>
+      <td><code>/api/goals/:id</code></td>
+      <td>DELETE</td>
+      <td>HR, Manager, Admin</td>
+      <td>Deletes an objective.</td>
+    </tr>
+    <tr>
+      <td><code>/api/appraisals</code></td>
+      <td>GET</td>
+      <td>All Authenticated</td>
+      <td>Query by <code>quarter</code>, <code>year</code>, <code>departmentId</code>, <code>userId</code>. Returns KPI scores and review status.</td>
+    </tr>
+    <tr>
+      <td><code>/api/appraisals</code></td>
+      <td>POST</td>
+      <td>All Authenticated</td>
+      <td>Initializes or creates appraisal record.</td>
+    </tr>
+    <tr>
+      <td><code>/api/appraisals/:id</code></td>
+      <td>PUT</td>
+      <td>Assignee, Line Manager, HR</td>
+      <td>Submits employee self-review or manager evaluation and calculates overall rating.</td>
+    </tr>
+    <tr>
+      <td><code>/api/feedback</code></td>
+      <td>GET</td>
+      <td>All Authenticated</td>
+      <td>Query by <code>quarter</code>, <code>year</code>, <code>employeeId</code>, <code>reviewerId</code>.</td>
+    </tr>
+    <tr>
+      <td><code>/api/feedback</code></td>
+      <td>POST</td>
+      <td>All Authenticated</td>
+      <td>Submits a 4-competency 360 feedback evaluation.</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="footer">
+  <p>&copy; 2026 Cybaem Tech HRMS. Confidential — For internal company operations and test verification.</p>
+</div>
+
+</body>
+</html>
