@@ -411,57 +411,6 @@ export default function AuthPage() {
               </form>
             </Form>
 
-            {/* Quick Client Test & Evaluation Accounts */}
-            <div className="mt-5 p-3.5 rounded-2xl bg-slate-50 dark:bg-white/[0.03] border border-slate-200 dark:border-white/[0.08]">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
-                  <Shield className="h-3.5 w-3.5 text-teal-600" />
-                  Client Test Accounts
-                </span>
-                <span className="text-[10px] font-semibold text-amber-700 dark:text-amber-400 bg-amber-100 dark:bg-amber-950/60 px-2 py-0.5 rounded-full border border-amber-300 dark:border-amber-800">
-                  10-Day Access (Expires 09-Nov-2026)
-                </span>
-              </div>
-              <p className="text-[11px] text-slate-500 dark:text-slate-400 mb-2.5">
-                Click any role below to pre-fill credentials for client evaluation:
-              </p>
-              <div className="grid grid-cols-3 gap-2 text-xs">
-                <button
-                  type="button"
-                  onClick={() => {
-                    loginForm.setValue("username", "test_admin");
-                    loginForm.setValue("password", "Admin@Test2026");
-                  }}
-                  className="px-2 py-1.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-[#0c1427] hover:border-teal-500 hover:text-teal-600 text-slate-700 dark:text-slate-200 font-medium transition text-center shadow-xs"
-                >
-                  <span className="block font-bold">Admin</span>
-                  <span className="text-[10px] text-slate-400">test_admin</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    loginForm.setValue("username", "test_hr");
-                    loginForm.setValue("password", "HR@Test2026");
-                  }}
-                  className="px-2 py-1.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-[#0c1427] hover:border-teal-500 hover:text-teal-600 text-slate-700 dark:text-slate-200 font-medium transition text-center shadow-xs"
-                >
-                  <span className="block font-bold">HR</span>
-                  <span className="text-[10px] text-slate-400">test_hr</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    loginForm.setValue("username", "test_emp");
-                    loginForm.setValue("password", "Emp@Test2026");
-                  }}
-                  className="px-2 py-1.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-[#0c1427] hover:border-teal-500 hover:text-teal-600 text-slate-700 dark:text-slate-200 font-medium transition text-center shadow-xs"
-                >
-                  <span className="block font-bold">Employee</span>
-                  <span className="text-[10px] text-slate-400">test_emp</span>
-                </button>
-              </div>
-            </div>
-
             {/* Divider */}
             <div className="relative my-6">
               <div className="absolute inset-0 flex items-center">

@@ -334,17 +334,6 @@ export function Header() {
             <Calendar className="h-5 w-5" />
           </Button>
 
-          {/* Test / Client Account 10-Day Expiry Indicator */}
-          {user?.expiresAt && (() => {
-            const diffDays = Math.max(0, Math.ceil((new Date(user.expiresAt).getTime() - Date.now()) / (1000 * 60 * 60 * 24)));
-            return (
-              <div className="hidden md:flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-900 border border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800 shadow-xs">
-                <Clock className="w-3.5 h-3.5 text-amber-600 animate-pulse shrink-0" />
-                <span>Client Demo &bull; {diffDays} {diffDays === 1 ? 'day' : 'days'} left (Expires {new Date(user.expiresAt).toLocaleDateString()})</span>
-              </div>
-            );
-          })()}
-
           {/* Check-in button - visible on larger screens (hidden for developers) */}
           {user?.role !== 'developer' && (
             <div className="hidden sm:block">

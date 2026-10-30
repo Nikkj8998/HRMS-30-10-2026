@@ -499,17 +499,7 @@ export function Sidebar({ className }: SidebarProps) {
                   <p className="text-sm font-bold text-slate-800 dark:text-white truncate leading-snug">
                     {user.firstName} {user.lastName}
                   </p>
-                  <div className="flex items-center gap-1.5 flex-wrap">
-                    <p className="text-[10px] text-slate-500 dark:text-slate-400 font-medium capitalize tracking-wider">{user.role}</p>
-                    {user.expiresAt && (() => {
-                      const days = Math.max(0, Math.ceil((new Date(user.expiresAt).getTime() - Date.now()) / (1000 * 60 * 60 * 24)));
-                      return (
-                        <span className="text-[9px] font-bold text-amber-700 bg-amber-100 dark:bg-amber-950/60 dark:text-amber-300 px-1 py-0.2 rounded border border-amber-300">
-                          {days}d test
-                        </span>
-                      );
-                    })()}
-                  </div>
+                  <p className="text-[10px] text-slate-500 dark:text-slate-400 font-medium capitalize tracking-wider">{user.role}</p>
                 </div>
               )}
 
