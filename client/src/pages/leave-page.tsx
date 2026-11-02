@@ -49,7 +49,8 @@ import {
   Phone,
   RefreshCw,
   AlertCircle,
-  PieChart
+  PieChart,
+  Sparkles
 } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { LeaveRequest, User, LeaveBalance, Department } from "@shared/schema";
