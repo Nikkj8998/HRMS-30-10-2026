@@ -20,7 +20,7 @@
       "address": "Pune, Maharashtra",
       "gender": "male",
       "maritalStatus": "married",
-      "dateOfBirth": "1988-10-29T00:00:00.000Z",
+      "dateOfBirth": "1988-11-01T18:30:00.000Z",
       "reportingTo": null,
       "bankName": "ICICI Bank",
       "bankAccountNumber": "50100000000001",
@@ -63245,6 +63245,17 @@
       "createdAt": "2026-11-02T09:51:01.140Z",
       "relatedUserId": null,
       "relatedLeaveId": null
+    },
+    {
+      "userId": 1,
+      "type": "birthday",
+      "title": "🎂 Birthday Wish from Test Admin!",
+      "message": "Test Admin (ADMIN) sent you warm birthday wishes: \"Wishing you a joyful Birthday and a wonderful year ahead!\" 🎉🎈",
+      "isRead": false,
+      "id": 198,
+      "createdAt": "2026-11-02T10:19:53.256Z",
+      "relatedUserId": null,
+      "relatedLeaveId": null
     }
   ],
   "currentUserId": 1000,
@@ -63252,7 +63263,7 @@
   "currentAttendanceId": 6503,
   "currentLeaveRequestId": 155,
   "currentHolidayId": 111,
-  "currentNotificationId": 198,
+  "currentNotificationId": 199,
   "paymentRecords": [
     {
       "id": 1,
