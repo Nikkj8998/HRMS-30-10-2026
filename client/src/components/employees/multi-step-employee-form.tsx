@@ -105,12 +105,12 @@ export function MultiStepEmployeeForm({ employee, departments, onSuccess }: Mult
     email: z.string().email("Invalid email address"),
     phoneNumber: z.string().optional(),
     address: z.string().optional(),
-    dateOfBirth: z.date().optional().refine((date) => {
-      if (!date) return true; // Optional field
+    dateOfBirth: z.date().optional().nullable().refine((date) => {
+      if (!date) return true;
       const age = differenceInYears(new Date(), date);
-      return age >= 20;
+      return age >= 18;
     }, {
-      message: "Age must be more than 20"
+      message: "Employee must be at least 18 years old"
     }),
     gender: z.enum(['male', 'female', 'other', 'prefer_not_to_say']).optional(),
     maritalStatus: z.enum(['single', 'married', 'divorced', 'widowed', 'prefer_not_to_say']).optional(),
@@ -175,8 +175,44 @@ export function MultiStepEmployeeForm({ employee, departments, onSuccess }: Mult
     },
   });
 
+  // Synchronize form values whenever editing employee changes
+  useEffect(() => {
+    if (employee) {
+      form.reset({
+        employeeId: employee.id?.toString() || "",
+        firstName: employee.firstName || "",
+        lastName: employee.lastName || "",
+        email: employee.email || "",
+        phoneNumber: employee.phoneNumber || "",
+        address: employee.address || "",
+        dateOfBirth: employee.dateOfBirth ? new Date(employee.dateOfBirth) : undefined,
+        gender: employee.gender || undefined,
+        maritalStatus: employee.maritalStatus || undefined,
+        photoUrl: employee.photoUrl || "",
+        username: employee.username || "",
+        password: "",
+        role: employee.role || "employee",
+        departmentId: employee.departmentId || null,
+        position: employee.position || "",
+        joinDate: employee.joinDate ? new Date(employee.joinDate) : undefined,
+        workLocation: employee.workLocation || "",
+        reportingTo: employee.reportingTo || null,
+        salary: employee.salary || undefined,
+        bankAccountNumber: employee.bankAccountNumber || "",
+        bankAccountHolderName: employee.bankAccountHolderName || "",
+        bankName: employee.bankName || "",
+        bankIFSCCode: employee.bankIFSCCode || "",
+        bankAccountType: employee.bankAccountType || undefined,
+        aadhaarCard: employee.aadhaarCard || "",
+        panCard: employee.panCard || "",
+        documents: employee.documents || [],
+      });
+      if (employee.photoUrl) setSelectedPhoto(employee.photoUrl);
+    }
+  }, [employee]);
+
   // Calculate age from date of birth
-  const calculateAge = (birthDate: Date | undefined): number | null => {
+  const calculateAge = (birthDate: Date | null | undefined): number | null => {
     if (!birthDate) return null;
     return differenceInYears(new Date(), birthDate);
   };
@@ -780,48 +816,48 @@ export function MultiStepEmployeeForm({ employee, departments, onSuccess }: Mult
                           <FormField
                             control={form.control}
                             name="dateOfBirth"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel className="text-sm font-semibold text-gray-700 mb-2 block">Date of Birth</FormLabel>
-                                <Popover>
-                                  <PopoverTrigger asChild>
-                                    <FormControl>
-                                      <Button
-                                        variant="outline"
-                                        className={cn(
-                                          "w-full h-12 pl-3 text-left font-medium border border-gray-300 hover:border-blue-400 rounded-xl transition-all duration-200 bg-white",
-                                          !field.value && "text-gray-500"
-                                        )}
-                                      >
-                                        {field.value ? format(field.value, "MMM dd, yyyy") : "Select date"}
-                                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                                      </Button>
-                                    </FormControl>
-                                  </PopoverTrigger>
-                                  <PopoverContent className="w-auto p-0" align="start">
-                                    <Calendar
-                                      mode="single"
-                                      selected={field.value}
-                                      onSelect={field.onChange}
-                                      disabled={(date) => {
-                                        const today = new Date();
-                                        const twentyYearsAgo = subYears(today, 20);
-                                        return date > twentyYearsAgo || date < new Date("1900-01-01");
+                            render={({ field }) => {
+                              const dateVal = field.value instanceof Date && !isNaN(field.value.getTime())
+                                ? field.value
+                                : (typeof field.value === 'string' && !isNaN(new Date(field.value).getTime()) ? new Date(field.value) : undefined);
+                              const formattedInput = dateVal ? format(dateVal, "yyyy-MM-dd") : "";
+
+                              return (
+                                <FormItem>
+                                  <div className="flex items-center justify-between mb-2">
+                                    <FormLabel className="text-sm font-semibold text-gray-700 block">Date of Birth</FormLabel>
+                                    {age !== null && (
+                                      <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                                        ✓ Age: {age} years
+                                      </span>
+                                    )}
+                                  </div>
+                                  <FormControl>
+                                    <Input
+                                      type="date"
+                                      value={formattedInput}
+                                      max={format(subYears(new Date(), 18), "yyyy-MM-dd")}
+                                      min="1940-01-01"
+                                      onChange={(e) => {
+                                        const val = e.target.value;
+                                        if (val) {
+                                          const [year, month, day] = val.split('-').map(Number);
+                                          field.onChange(new Date(year, month - 1, day));
+                                        } else {
+                                          field.onChange(undefined);
+                                        }
                                       }}
-                                      yearRange={{ from: 1920, to: new Date().getFullYear() }}
-                                      month={field.value || subYears(new Date(), 20)}
-                                      initialFocus
+                                      className="w-full h-12 px-3 text-left font-medium border border-gray-300 hover:border-blue-400 focus:border-blue-500 rounded-xl transition-all duration-200 bg-white text-gray-800"
+                                      data-testid="input-date-of-birth"
                                     />
-                                  </PopoverContent>
-                                </Popover>
-                                <FormMessage />
-                                {age !== null && (
-                                  <p className="text-sm text-emerald-600 mt-1 font-medium">
-                                    ✓ Age: {age} years
+                                  </FormControl>
+                                  <p className="text-[11px] text-gray-400 mt-1">
+                                    Click the calendar icon or type to set birth date (must be 18+ years)
                                   </p>
-                                )}
-                              </FormItem>
-                            )}
+                                  <FormMessage />
+                                </FormItem>
+                              );
+                            }}
                           />
 
                           <FormField
@@ -855,87 +891,36 @@ export function MultiStepEmployeeForm({ employee, departments, onSuccess }: Mult
                           <FormField
                             control={form.control}
                             name="joinDate"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel className="text-sm font-semibold text-gray-700 mb-2 block">Date of Joining</FormLabel>
-                                <Popover>
-                                  <PopoverTrigger asChild>
-                                    <FormControl>
-                                      <Button
-                                        variant="outline"
-                                        className={cn(
-                                          "w-full h-12 pl-3 text-left font-medium border border-gray-300 hover:border-blue-400 rounded-xl transition-all duration-200 bg-white",
-                                          !field.value && "text-gray-500"
-                                        )}
-                                      >
-                                        {field.value ? format(field.value, "MMM dd, yyyy") : "Select joining date"}
-                                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                                      </Button>
-                                    </FormControl>
-                                  </PopoverTrigger>
-                                  <PopoverContent className="w-auto p-0" align="start">
-                                    <Calendar
-                                      mode="single"
-                                      selected={field.value}
-                                      onSelect={field.onChange}
-                                      disabled={(date) => date > new Date() || date < new Date("1900-01-01")}
-                                      initialFocus
-                                    />
-                                  </PopoverContent>
-                                </Popover>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
+                            render={({ field }) => {
+                              const dateVal = field.value instanceof Date && !isNaN(field.value.getTime())
+                                ? field.value
+                                : (typeof field.value === 'string' && !isNaN(new Date(field.value).getTime()) ? new Date(field.value) : undefined);
+                              const formattedInput = dateVal ? format(dateVal, "yyyy-MM-dd") : "";
 
-                          <FormField
-                            control={form.control}
-                            name="position"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel className="text-sm font-semibold text-gray-700 mb-2 block">Designation</FormLabel>
-                                <FormControl>
-                                  <Input 
-                                    placeholder="Enter job title/designation" 
-                                    className="h-12 border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 rounded-xl text-sm font-medium transition-all duration-200 bg-white"
-                                    {...field} 
-                                  />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-                        </div>
-
-                        {/* Department & Work Location Row */}
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                          <FormField
-                            control={form.control}
-                            name="departmentId"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel className="text-sm font-semibold text-gray-700 mb-2 block">Department</FormLabel>
-                                <Select 
-                                  value={field.value?.toString() || "none"} 
-                                  onValueChange={(value) => field.onChange(value === "none" ? null : parseInt(value))}
-                                >
+                              return (
+                                <FormItem>
+                                  <FormLabel className="text-sm font-semibold text-gray-700 mb-2 block">Date of Joining</FormLabel>
                                   <FormControl>
-                                    <SelectTrigger className="h-12 border border-gray-300 focus:border-blue-500 rounded-xl font-medium transition-all duration-200 bg-white">
-                                      <SelectValue placeholder="Select department" />
-                                    </SelectTrigger>
+                                    <Input
+                                      type="date"
+                                      value={formattedInput}
+                                      onChange={(e) => {
+                                        const val = e.target.value;
+                                        if (val) {
+                                          const [year, month, day] = val.split('-').map(Number);
+                                          field.onChange(new Date(year, month - 1, day));
+                                        } else {
+                                          field.onChange(undefined);
+                                        }
+                                      }}
+                                      className="w-full h-12 px-3 font-medium border border-gray-300 hover:border-blue-400 focus:border-blue-500 rounded-xl transition-all duration-200 bg-white text-gray-800"
+                                      data-testid="input-join-date"
+                                    />
                                   </FormControl>
-                                  <SelectContent>
-                                    <SelectItem value="none">No Department</SelectItem>
-                                    {departments.map((department) => (
-                                      <SelectItem key={department.id} value={department.id.toString()}>
-                                        {department.name}
-                                      </SelectItem>
-                                    ))}
-                                  </SelectContent>
-                                </Select>
-                                <FormMessage />
-                              </FormItem>
-                            )}
+                                  <FormMessage />
+                                </FormItem>
+                              );
+                            }}
                           />
 
                           <FormField

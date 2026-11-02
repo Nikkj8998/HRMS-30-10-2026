@@ -4,7 +4,6 @@ import { DayPicker } from "react-day-picker"
 
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker> & {
   yearRange?: { from: number; to: number }
@@ -15,19 +14,20 @@ function Calendar({
   classNames,
   showOutsideDays = true,
   yearRange,
+  month: propsMonth,
+  onMonthChange: propsOnMonthChange,
   ...props
 }: CalendarProps) {
-  const [month, setMonth] = React.useState<Date>(props.month || new Date())
-  
+  const [month, setMonth] = React.useState<Date>(() => propsMonth || new Date())
+
   const years = React.useMemo(() => {
     if (yearRange) {
       const { from, to } = yearRange
       return Array.from({ length: to - from + 1 }, (_, i) => from + i)
     }
-    // Default range from 1950 to current year + 10
     const currentYear = new Date().getFullYear()
-    return Array.from({ length: currentYear - 1950 + 11 }, (_, i) => 1950 + i)
-  }, [yearRange])
+    return Array.from({ length: currentYear - 1940 + 1 }, (_, i) => 1940 + i)
+  }, [yearRange?.from, yearRange?.to])
 
   const months = [
     "January", "February", "March", "April", "May", "June",
@@ -35,59 +35,60 @@ function Calendar({
   ]
 
   const handleMonthChange = (monthIndex: string) => {
-    const newMonth = new Date(month.getFullYear(), parseInt(monthIndex), 1)
+    const newMonth = new Date(month.getFullYear(), parseInt(monthIndex, 10), 1)
     setMonth(newMonth)
-    props.onMonthChange?.(newMonth)
+    propsOnMonthChange?.(newMonth)
   }
 
   const handleYearChange = (year: string) => {
-    const newMonth = new Date(parseInt(year), month.getMonth(), 1)
+    const newMonth = new Date(parseInt(year, 10), month.getMonth(), 1)
     setMonth(newMonth)
-    props.onMonthChange?.(newMonth)
+    propsOnMonthChange?.(newMonth)
   }
 
   React.useEffect(() => {
-    if (props.month) {
-      setMonth(props.month)
+    if (propsMonth && propsMonth instanceof Date && !isNaN(propsMonth.getTime())) {
+      setMonth(propsMonth)
     }
-  }, [props.month])
+  }, [propsMonth?.getTime()])
 
   return (
     <div className={cn("p-3", className)}>
-      {/* Year and Month selectors */}
-      <div className="flex items-center justify-between space-x-2 mb-4">
-        <Select value={month.getMonth().toString()} onValueChange={handleMonthChange}>
-          <SelectTrigger className="w-32">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            {months.map((monthName, index) => (
-              <SelectItem key={index} value={index.toString()}>
-                {monthName}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        
-        <Select value={month.getFullYear().toString()} onValueChange={handleYearChange}>
-          <SelectTrigger className="w-20">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent className="max-h-[200px]">
-            {years.map(year => (
-              <SelectItem key={year} value={year.toString()}>
-                {year}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+      {/* Year and Month native selectors - won't close parent popovers */}
+      <div className="flex items-center justify-between gap-2 mb-3 px-1">
+        <select
+          value={month.getMonth().toString()}
+          onChange={(e) => handleMonthChange(e.target.value)}
+          className="h-8 rounded-lg border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-900 px-2 py-1 text-xs font-semibold text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer shadow-xs"
+        >
+          {months.map((monthName, index) => (
+            <option key={index} value={index.toString()}>
+              {monthName}
+            </option>
+          ))}
+        </select>
+
+        <select
+          value={month.getFullYear().toString()}
+          onChange={(e) => handleYearChange(e.target.value)}
+          className="h-8 rounded-lg border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-900 px-2 py-1 text-xs font-semibold text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer shadow-xs"
+        >
+          {years.map(year => (
+            <option key={year} value={year.toString()}>
+              {year}
+            </option>
+          ))}
+        </select>
       </div>
 
       {/* Calendar */}
       <DayPicker
         showOutsideDays={showOutsideDays}
         month={month}
-        onMonthChange={setMonth}
+        onMonthChange={(newMonth) => {
+          setMonth(newMonth)
+          propsOnMonthChange?.(newMonth)
+        }}
         classNames={{
           months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
           month: "space-y-4",
