@@ -778,6 +778,14 @@ export default function LeavePage() {
                 <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
                   <DialogTrigger asChild>
                     <Button className="!bg-blue-600 hover:!bg-blue-700 text-white font-semibold rounded-xl shadow-sm px-4 h-10 flex items-center border-none"><Plus className="h-4 w-4 mr-2" />Apply for Leave</Button>
+                  </DialogTrigger>
+                  <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-[#0c1427]/95 backdrop-blur-xl border border-white/[0.08] text-slate-200">
+                    <DialogHeader><DialogTitle className="text-white">Apply for Leave</DialogTitle></DialogHeader>
+                    <LeaveForm onSuccess={() => { setIsAddOpen(false); queryClient.invalidateQueries({ queryKey: ["/api/leave-requests"] }); }} />
+                  </DialogContent>
+                </Dialog>
+              )}
+
               {targetUserId === authUser?.id && (authUser?.role === 'admin' || authUser?.role === 'hr') && (
                 <Dialog open={isPolicyOpen} onOpenChange={setIsPolicyOpen}>
                   <DialogTrigger asChild>
@@ -855,13 +863,6 @@ export default function LeavePage() {
                         </Button>
                       </div>
                     </div>
-                  </DialogContent>
-                </Dialog>
-              )}
-                  </DialogTrigger>
-                  <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-[#0c1427]/95 backdrop-blur-xl border border-white/[0.08] text-slate-200">
-                    <DialogHeader><DialogTitle className="text-white">Apply for Leave</DialogTitle></DialogHeader>
-                    <LeaveForm onSuccess={() => { setIsAddOpen(false); queryClient.invalidateQueries({ queryKey: ["/api/leave-requests"] }); }} />
                   </DialogContent>
                 </Dialog>
               )}
