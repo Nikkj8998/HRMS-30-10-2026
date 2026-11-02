@@ -51,9 +51,10 @@ cp php-backend/config/*.php     "${OUTPUT_DIR}/api/config/"
 cp php-backend/controllers/*.php "${OUTPUT_DIR}/api/controllers/"
 cp php-backend/helpers/*.php    "${OUTPUT_DIR}/api/helpers/"
 
-# Step 6: Copy system-settings.json (default settings)
-echo "Step 6: Copying default settings..."
+# Step 6: Copy default data and settings
+echo "Step 6: Copying default data and settings..."
 cp data/system-settings.json    "${OUTPUT_DIR}/data/"
+cp data/hr-data.json            "${OUTPUT_DIR}/data/"
 
 # Step 7: Create a .htaccess fallback for Apache hosts
 cat > "${OUTPUT_DIR}/.htaccess" << 'HTACCESS'

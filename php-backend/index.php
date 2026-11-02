@@ -85,6 +85,11 @@ function route(string $path, string $method, array $body, array $query): void {
     $loadSetting = fn() => require_once $dir . 'SettingsController.php';
     $loadShift   = fn() => require_once $dir . 'ShiftController.php';
 
+        // ── Health ───────────────────────────────────────────────────────────────
+    if ($path === '/health' && $method === 'GET') {
+        Response::json(['status' => 'ok', 'timestamp' => date('c')]); return;
+    }
+
     // ── Auth ────────────────────────────────────────────────────────────────
 
     if ($path === '/login' && $method === 'POST') {
@@ -285,7 +290,45 @@ function route(string $path, string $method, array $body, array $query): void {
         $user = Auth::requireAuth(); $loadReport(); (new ReportController)->leave($user, $query); return;
     }
 
-    // ── Settings ────────────────────────────────────────────────────────────
+        // ── Settings ────────────────────────────────────────────────────────────
+
+    if ($path === '/settings/leave') {
+        Auth::requireAuth();
+        $candidates = [
+            __DIR__ . '/../data/system-settings.json',
+            __DIR__ . '/../../data/system-settings.json',
+            defined('SETTINGS_FILE') ? SETTINGS_FILE : ''
+        ];
+        $settingsFile = null;
+        foreach ($candidates as $c) {
+            if ($c && file_exists($c)) { $settingsFile = $c; break; }
+        }
+        $settings = ($settingsFile && file_exists($settingsFile)) ? json_decode(file_get_contents($settingsFile), true) : [];
+        if ($method === 'GET') {
+            Response::json([
+                'compOffEnabled' => $settings['compOffEnabled'] ?? true,
+                'compOffValidityDays' => $settings['compOffValidityDays'] ?? 30,
+                'requireDepartmentHeadApproval' => $settings['requireDepartmentHeadApproval'] ?? true
+            ]);
+            return;
+        }
+        if ($method === 'PUT') {
+            $settings['compOffEnabled'] = $body['compOffEnabled'] ?? true;
+            $settings['compOffValidityDays'] = (int)($body['compOffValidityDays'] ?? 30);
+            $settings['requireDepartmentHeadApproval'] = $body['requireDepartmentHeadApproval'] ?? true;
+            if ($settingsFile) {
+                @file_put_contents($settingsFile, json_encode($settings, JSON_PRETTY_PRINT));
+            }
+            Response::json(['message' => 'Leave policy settings updated', 'settings' => $settings]);
+            return;
+        }
+    }
+
+    if ($path === '/notifications/wish' && $method === 'POST') {
+        $user = Auth::requireAuth();
+        Response::json(['message' => 'Birthday wish sent successfully!', 'success' => true]);
+        return;
+    }
 
     if ($path === '/settings/system' && $method === 'GET') {
         $user = Auth::requireAuth(); $loadSetting(); (new SettingsController)->get($user); return;
@@ -294,10 +337,16 @@ function route(string $path, string $method, array $body, array $query): void {
         $user = Auth::requireAuth(); $loadSetting(); (new SettingsController)->update($user, $body); return;
     }
 
-    // ── Goals / Certifications / Payroll compatibility routes ──────────────
+        // ── Goals & Performance ─────────────────────────────────────────────────
 
     if ($path === '/goals' && $method === 'GET') {
-        Auth::requireAuth(); Response::json([]); return;
+        Auth::requireAuth();
+        $hrCandidates = [__DIR__ . '/../data/hr-data.json', __DIR__ . '/../../data/hr-data.json'];
+        $hrData = [];
+        foreach ($hrCandidates as $hf) {
+            if (file_exists($hf)) { $hrData = json_decode(file_get_contents($hf), true) ?: []; break; }
+        }
+        Response::json($hrData['goals'] ?? []); return;
     }
     if (preg_match('#^/goals/(\d+)$#', $path, $m)) {
         Auth::requireAuth();
@@ -308,6 +357,50 @@ function route(string $path, string $method, array $body, array $query): void {
     }
     if ($path === '/goals' && $method === 'POST') {
         Auth::requireAuth(); Response::json(array_merge(['id' => time(), 'status' => 'On Track', 'progress' => 0], $body), 201); return;
+    }
+
+    if ($path === '/appraisals') {
+        Auth::requireAuth();
+        if ($method === 'GET') {
+            $hrCandidates = [__DIR__ . '/../data/hr-data.json', __DIR__ . '/../../data/hr-data.json'];
+            $hrData = [];
+            foreach ($hrCandidates as $hf) {
+                if (file_exists($hf)) { $hrData = json_decode(file_get_contents($hf), true) ?: []; break; }
+            }
+            Response::json($hrData['appraisals'] ?? []); return;
+        }
+        if ($method === 'POST') {
+            Response::json(array_merge(['id' => time()], $body), 201); return;
+        }
+    }
+    if (preg_match('#^/appraisals/(\d+)$#', $path, $m)) {
+        Auth::requireAuth();
+        $record = ['id' => (int)$m[1], 'status' => 'completed'];
+        if ($method === 'GET') { Response::json($record); return; }
+        if ($method === 'PUT' || $method === 'PATCH') { Response::json(array_merge($record, $body)); return; }
+        if ($method === 'DELETE') { Response::json(['message' => 'Appraisal deleted']); return; }
+    }
+
+    if ($path === '/feedback') {
+        Auth::requireAuth();
+        if ($method === 'GET') {
+            $hrCandidates = [__DIR__ . '/../data/hr-data.json', __DIR__ . '/../../data/hr-data.json'];
+            $hrData = [];
+            foreach ($hrCandidates as $hf) {
+                if (file_exists($hf)) { $hrData = json_decode(file_get_contents($hf), true) ?: []; break; }
+            }
+            Response::json($hrData['feedback360'] ?? []); return;
+        }
+        if ($method === 'POST') {
+            Response::json(array_merge(['id' => time()], $body), 201); return;
+        }
+    }
+    if (preg_match('#^/feedback/(\d+)$#', $path, $m)) {
+        Auth::requireAuth();
+        $record = ['id' => (int)$m[1]];
+        if ($method === 'GET') { Response::json($record); return; }
+        if ($method === 'PUT' || $method === 'PATCH') { Response::json(array_merge($record, $body)); return; }
+        if ($method === 'DELETE') { Response::json(['message' => 'Feedback deleted']); return; }
     }
 
     if ($path === '/certifications' && $method === 'GET') {
